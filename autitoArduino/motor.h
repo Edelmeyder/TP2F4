@@ -7,11 +7,11 @@
 
 #define MOTOR_DELAY 500  // Needed to avoid overloading motors by quickly changing rotation direction
 
-void MOTOR_init(void);
-void MOTOR_forward(void);
-void MOTOR_backward(void);
-void MOTOR_forward_P(void);
-void MOTOR_backward_P(void);
-void MOTOR_stop(void);
+void MOTOR_init(void);        // Initialises motor related pins
+void MOTOR_forward(void);     // Sets the motor forwards
+void MOTOR_backward(void);    // Sets the motor backwards
+void MOTOR_forward_P(void);   // Turns the wheel one turn forward
+void MOTOR_backward_P(void);  // Turns the wheel one turn backward
+void MOTOR_stop(void);        // Stops the motor
 
 #endif
