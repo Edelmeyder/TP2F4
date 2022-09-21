@@ -36,9 +36,11 @@ void loop() {
         break;
       case 'L':
         STEERING_turnLeft();
+        delay(100);
         break;
       case 'R':
         STEERING_turnRight();
+        delay(100);
         break;
       case 'P':
         PEW_pew();

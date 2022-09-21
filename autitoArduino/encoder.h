@@ -6,6 +6,6 @@
 
 void ENCODER_init(void);  // Initializes encoder related pins
 void ENCODER_start(void); // Starts counting pulses
-int ENCODER_wait(void);   // When a full turn has been made stops counting and returns 0; otherwise returns 1
+void ENCODER_wait(void);   // When a full turn has been made stops counting and returns 0; otherwise returns 1
 
 #endif

@@ -19,7 +19,7 @@ int STEERING_turnLeft() {
   return 0;
 }
 int STEERING_turnRight() {
-  if (pos + 3 > MAX_R) {
+  if (pos + 3 < MAX_R) {
     pos += 3;
     steering.write(pos);
     return 1;

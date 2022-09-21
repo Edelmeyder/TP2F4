@@ -7,5 +7,6 @@ void PEW_init() {
 }
 
 void PEW_pew() {
-  tone(PEW_PIN, 1000, 100); // 1000 Hz, 100 ms
+  tone(PEW_PIN, 1000, 150); // 1000 Hz, 100 ms
+  delay(200);
 }
