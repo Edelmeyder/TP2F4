@@ -2,14 +2,18 @@
 #include "encoder.h"
 #include "steering.h"
 #include "pew.h"
+#include "sensor.h"
 
 char cmd; // Stores the commands 
+int colision_state; //1 si hay objeto delante
 
 void setup() {
   MOTOR_init();
   ENCODER_init();
   STEERING_init();
   PEW_init();
+  SENSOR_init();
+  colision_state=0;
 
   Serial.begin(9600); // Serial communication with the ESP8266 
 
@@ -18,18 +22,32 @@ void setup() {
 }
 
 void loop() {
+
+  colision_state=SENSOR_Verif_Colision();
+
+  if (colision_state){  //pooling sensor, 1 si se detecto objeto
+
+    if (!MOTOR_GET_STATE()){  //si es 0 debemos pararlo
+      MOTOR_stop();
+    }
+  }
+  
   if (Serial.available() > 0) { // Handle received commands from the ESP8266
     cmd = Serial.read();
     digitalWrite(LED_BUILTIN, HIGH); // Built-in led shines while executing commands
     switch (cmd) {
       case 'F':
-        MOTOR_forward_P();
+        if(!colision_state){
+          MOTOR_forward_P();
+        }
         break;
       case 'B':
         MOTOR_backward_P();
         break;
       case 'f':
-        MOTOR_forward();
+        if(!colision_state){
+          MOTOR_forward();
+        }
         break;
       case 'b':
         MOTOR_backward();
