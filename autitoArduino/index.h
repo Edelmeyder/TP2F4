@@ -46,10 +46,10 @@ width: 1000px">
 
 <div id="divNormal" >
 <form action='' method='get'>
-  <input style='height:60%;width:40%;font-size:100px' name='F' type='submit' value=' &uarr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px' name='f' type='submit' value=' &uarr; ' /><br><br><br>
   <input style='height:60%;width:40%;font-size:100px ; margin-right: 2%' name='L' type='submit' value=' &larr; ' />
   <input style='height:60%;width:40%;font-size:100px' name='R' type='submit' value=' &rarr; ' /><br><br><br>
-  <input style='height:60%;width:40%;font-size:100px' name='B' type='submit' value=' &darr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px' name='b' type='submit' value=' &darr; ' /><br><br><br>
   <input style='height:60%;width:40%;font-size:100px; margin-right: 2% ; background-color: lightskyblue' name='P' type='submit' value='Pew'>
   <input style='height:60%;width:40%;font-size:100px ;background-color:indianred' name='S' type='submit' value='Stop'>
 

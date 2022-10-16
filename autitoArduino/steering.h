@@ -3,7 +3,7 @@
 
 #include <Servo.h>
 
-#define STEERING_PIN 5  // Pin to servo  
+#define STEERING_PIN D3  // Pin to servo  
 #define MAX_L 40        // Max. turn left  
 #define MAX_R 115       // Max. turn right
 #define STRGHT 85       // Streering stright direction

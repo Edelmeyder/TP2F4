@@ -15,7 +15,9 @@ void MOTOR_forward() {
   if (state == 1) { // If the motor is currently going backwards stop and wait
     MOTOR_stop();
     delay(MOTOR_DELAY);
+    
   }
+ 
   state = 0;
   digitalWrite(MOTOR_DIR_PIN, HIGH);    // direction = forward
   analogWrite(MOTOR_PWM_PIN, 255-MOTOR_SPEED);   // PWM speed
@@ -28,6 +30,7 @@ void MOTOR_backward() {
   }
   state = 1;
   digitalWrite(MOTOR_DIR_PIN, LOW);     // direction = backward
+  
   analogWrite(MOTOR_PWM_PIN, MOTOR_SPEED);   // PWM speed
 }
 

@@ -21,37 +21,37 @@ void menu(char cmd)
 {
   switch (cmd) {
       case 'F':
-        //MOTOR_forward_P();
+        MOTOR_forward_P();
         Serial.println("FORWARD_P");
         break;
       case 'B':
-        //MOTOR_backward_P();
+        MOTOR_backward_P();
         Serial.println("BACK_P");
         break;
       case 'f':
-        //MOTOR_forward();
+        MOTOR_forward();
         Serial.println("FORWARD");
         break;
       case 'b':
-        //MOTOR_backward();
+        MOTOR_backward();
         Serial.println("BACK");
         break;
       case 'L':
-        //STEERING_turnLeft();
+        STEERING_turnLeft();
         Serial.println("LEFT");
         delay(100);
         break;
       case 'R':
-        //STEERING_turnRight();
+        STEERING_turnRight();
         Serial.println("RIGHT");
         delay(100);
         break;
       case 'P':
-        //PEW_pew();
+        PEW_pew();
         Serial.println("PEW");
         break;
       case 'S':
-        //MOTOR_stop();
+        MOTOR_stop();
         Serial.println("STOP");
         break;
     }
