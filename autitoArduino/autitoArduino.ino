@@ -94,10 +94,10 @@ void handleRoot()
 }
 
 void setup() {
- // MOTOR_init();
-  //ENCODER_init();
-  //STEERING_init();
-  //PEW_init();
+  MOTOR_init();
+  ENCODER_init();
+  STEERING_init();
+  PEW_init();
 delay(10000);
   Serial.begin(115200);
   Serial.println();

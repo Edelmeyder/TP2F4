@@ -30,7 +30,7 @@ void MOTOR_backward() {
   }
   state = 1;
   digitalWrite(MOTOR_DIR_PIN, LOW);     // direction = backward
-  
+  //Serial.println("asdasdsadas");
   analogWrite(MOTOR_PWM_PIN, MOTOR_SPEED);   // PWM speed
 }
 
