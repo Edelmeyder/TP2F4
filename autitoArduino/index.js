@@ -1,5 +1,6 @@
-var lastfield = 7;
+  let lastfield = 7;
   let secuenceMode = false;
+  let d = new Date();
   const modebutton = document.getElementById('modebutton');
 
   modebutton.addEventListener('click', function handleClick() {
@@ -8,6 +9,7 @@ var lastfield = 7;
     document.getElementById('divSequence').style.display = secuenceMode ? "inline" : "none"
     document.getElementById('divNormal').style.display = secuenceMode ? "none" : "inline"
   });
+
   function incr(parmtr)
   {
     document.cntrform[0].value = document.cntrform[0].value + parmtr;
@@ -19,16 +21,17 @@ var lastfield = 7;
     document.cntrform[lastfield].value = 'Enviar: ';
   }
 
-  function changeMode(){
-    console.log("ENTROI ACA")
-   
+  function sendChar(char){
+    let request = new XMLHttpRequest();
+    request.open('GET', '/?' + char + d.getTime());
+    request.send();
   }
 
-  function sendit()
+  function sendSequence()
   {
-    var request = new XMLHttpRequest();
-    var d = new Date();
-    var tempstr = '';
+    let request = new XMLHttpRequest();
+    
+    let tempstr = '';
 
     request.onreadystatechange = function() 
     {
@@ -38,18 +41,28 @@ var lastfield = 7;
       }
     }
 
-    for (var i = 0; i < document.cntrform[0].value.length; i++) 
+    const cant = document.cntrform[0].value.length;
+    for (let i = 0; i < cant; i++) 
     {
-      if      (document.cntrform[0].value.charCodeAt(i) == 8593)
-       tempstr = tempstr+'F';
-      else if (document.cntrform[0].value.charCodeAt(i) == 8595)
-       tempstr = tempstr+'B';
-      else if (document.cntrform[0].value.charCodeAt(i) == 8592)
-       tempstr = tempstr+'L';
-      else if (document.cntrform[0].value.charCodeAt(i) == 8594)
-       tempstr = tempstr+'R';
-      else if (document.cntrform[0].value.charCodeAt(i) == 9887)
-       tempstr = tempstr+'P';
+      switch (document.cntrform[0].value.charCodeAt(i)){
+        case 8593:
+          tempstr = tempstr+'F';
+          break;
+        case 8595:
+          tempstr = tempstr+'B';
+          break;
+        case 8592:
+          tempstr = tempstr+'L';
+          break;
+        case 8594:
+          tempstr = tempstr+'R';
+          break;
+        case 9887: 
+          tempstr = tempstr+'P';
+          break;
+        default:
+          break;
+      }
     }
     request.open('GET', '/?E=' + tempstr + d.getTime(), true);
     request.send();

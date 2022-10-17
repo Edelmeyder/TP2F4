@@ -40,21 +40,21 @@ width: 1000px">
            <! --  05   -->
   
   <br><br>             
-  <input style='height:60%;width:80%;font-size:100px;background-color: lightgreen' type='button' onclick='sendit()' value='Enviar: '>               <! --  07   -->
+  <input style='height:60%;width:80%;font-size:100px;background-color: lightgreen' type='button' onclick='sendSequence()' value='Enviar: '>               <! --  07   -->
 </form>
 </div>
 
 <div id="divNormal" >
-<form action='' method='get'>
-  <input style='height:60%;width:40%;font-size:100px' name='f' type='submit' value=' &uarr; ' /><br><br><br>
-  <input style='height:60%;width:40%;font-size:100px ; margin-right: 2%' name='L' type='submit' value=' &larr; ' />
-  <input style='height:60%;width:40%;font-size:100px' name='R' type='submit' value=' &rarr; ' /><br><br><br>
-  <input style='height:60%;width:40%;font-size:100px' name='b' type='submit' value=' &darr; ' /><br><br><br>
-  <input style='height:60%;width:40%;font-size:100px; margin-right: 2% ; background-color: lightskyblue' name='P' type='submit' value='Pew'>
-  <input style='height:60%;width:40%;font-size:100px ;background-color:indianred' name='S' type='submit' value='Stop'>
+<form name="normalForm">
+  <input style='height:60%;width:40%;font-size:100px' name='F' type='button' onClick="sendChar('F')" value=' &uarr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px ; margin-right: 2%' name='L' onClick="sendChar('L')" type='button' value=' &larr; ' />
+  <input style='height:60%;width:40%;font-size:100px' name='R' type='button' onClick="sendChar('R')" value=' &rarr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px' name='B' type='button' onClick="sendChar('B')" value=' &darr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px; margin-right: 2% ; background-color: lightskyblue' name='P' onClick="sendChar('P')" type='button' value='Pew'>
+  <input style='height:60%;width:40%;font-size:100px ;background-color:indianred' name='S' onClick="sendChar('S')" type='button' value='Stop'>
 
   <br><br>
-  <input style='height:60%;width:40%;font-size:100px;visibility:hidden ; background-color: lightgreen' name='P'  value='Pew'>
+  <input style='height:60%;width:40%;font-size:100px;visibility:hidden ; background-color: lightgreen' name='P' onClick="sendChar('P')" value='Pew'>
 </form>
 
 </div>
@@ -63,8 +63,9 @@ width: 1000px">
 </div>
 </CENTER>
 <script lenguage="JavaScript">
-var lastfield = 7;
+    let lastfield = 7;
   let secuenceMode = false;
+  let d = new Date();
   const modebutton = document.getElementById('modebutton');
 
   modebutton.addEventListener('click', function handleClick() {
@@ -73,6 +74,7 @@ var lastfield = 7;
     document.getElementById('divSequence').style.display = secuenceMode ? "inline" : "none"
     document.getElementById('divNormal').style.display = secuenceMode ? "none" : "inline"
   });
+
   function incr(parmtr)
   {
     document.cntrform[0].value = document.cntrform[0].value + parmtr;
@@ -84,16 +86,17 @@ var lastfield = 7;
     document.cntrform[lastfield].value = 'Enviar: ';
   }
 
-  function changeMode(){
-    console.log("ENTROI ACA")
-   
+  function sendChar(char){
+    let request = new XMLHttpRequest();
+    request.open('GET', '/?' + char + d.getTime());
+    request.send();
   }
 
-  function sendit()
+  function sendSequence()
   {
-    var request = new XMLHttpRequest();
-    var d = new Date();
-    var tempstr = '';
+    let request = new XMLHttpRequest();
+    
+    let tempstr = '';
 
     request.onreadystatechange = function() 
     {
@@ -103,18 +106,28 @@ var lastfield = 7;
       }
     }
 
-    for (var i = 0; i < document.cntrform[0].value.length; i++) 
+    const cant = document.cntrform[0].value.length;
+    for (let i = 0; i < cant; i++) 
     {
-      if      (document.cntrform[0].value.charCodeAt(i) == 8593)
-       tempstr = tempstr+'F';
-      else if (document.cntrform[0].value.charCodeAt(i) == 8595)
-       tempstr = tempstr+'B';
-      else if (document.cntrform[0].value.charCodeAt(i) == 8592)
-       tempstr = tempstr+'L';
-      else if (document.cntrform[0].value.charCodeAt(i) == 8594)
-       tempstr = tempstr+'R';
-      else if (document.cntrform[0].value.charCodeAt(i) == 9887)
-       tempstr = tempstr+'P';
+      switch (document.cntrform[0].value.charCodeAt(i)){
+        case 8593:
+          tempstr = tempstr+'F';
+          break;
+        case 8595:
+          tempstr = tempstr+'B';
+          break;
+        case 8592:
+          tempstr = tempstr+'L';
+          break;
+        case 8594:
+          tempstr = tempstr+'R';
+          break;
+        case 9887: 
+          tempstr = tempstr+'P';
+          break;
+        default:
+          break;
+      }
     }
     request.open('GET', '/?E=' + tempstr + d.getTime(), true);
     request.send();
@@ -122,6 +135,4 @@ var lastfield = 7;
 </script>
 </body>
 </html>
-
-
 )=====";
