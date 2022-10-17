@@ -2,6 +2,7 @@
 #include "encoder.h"
 #include "steering.h"
 #include "pew.h"
+#include "sensor.h"
 
 #define LED_PIN D5
 
@@ -17,11 +18,16 @@ ESP8266WebServer server(80); //Web server
 
 //char cmd; // Stores the commands 
 
+
+int colision_state; //1 si hay objeto delante
+
 void menu(char cmd)
 {
   switch (cmd) {
       case 'F':
-        MOTOR_forward_P();
+        if(!colision_state){
+          MOTOR_forward_P();
+        }
         Serial.println("FORWARD_P");
         break;
       case 'B':
@@ -29,7 +35,9 @@ void menu(char cmd)
         Serial.println("BACK_P");
         break;
       case 'f':
-        MOTOR_forward();
+        if(!colision_state){
+          MOTOR_forward();
+        }
         Serial.println("FORWARD");
         break;
       case 'b':
@@ -94,11 +102,15 @@ void handleRoot()
 }
 
 void setup() {
+  delay(5000);
   MOTOR_init();
   ENCODER_init();
   STEERING_init();
   PEW_init();
-delay(10000);
+  SENSOR_init();
+  colision_state=0;
+  MOTOR_stop();
+delay(5000);
   Serial.begin(115200);
   Serial.println();
   Serial.println("Configuring access point...");
@@ -119,6 +131,14 @@ delay(10000);
 }
 
 void loop() {
+  colision_state=SENSOR_Verif_Colision();
+
+  if (colision_state){  //pooling sensor, 1 si se detecto objeto
+
+    if (!MOTOR_GET_STATE()){  //si es 0 es porque va hacia adelante entonces debemos pararlo
+      MOTOR_stop();
+    }
+  }
   server.handleClient();
   delay(2);
 }

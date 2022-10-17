@@ -1,4 +1,6 @@
 #include "encoder.h"
+#include "motor.h"
+#include "sensor.h"
 #include <Arduino.h>
 
 int pulses;
@@ -18,6 +20,12 @@ void ENCODER_start() {
 void ENCODER_wait() {
   timetick = millis(); // Used to prevent infinite loop in case no pulses are read
   while (pulses < ENCODER_HOLES && (millis() - timetick) < 500) {
+    if(SENSOR_Verif_Colision()){    //pooling sensor, 1 si se detecto objeto
+      if (!MOTOR_GET_STATE()){  //si es 0 es porque va hacia adelante entonces debemos pararlo
+          MOTOR_stop();
+          break;
+      }
+    }
     if (ENCODER_read()) { // A whole turn has been made
       pulses++;
     }

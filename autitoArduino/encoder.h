@@ -1,7 +1,7 @@
 #ifndef _ENCODER_H
 #define _ENCODER_H
 
-#define ENCODER_PIN 2     // Encoder pin
+#define ENCODER_PIN D2     // Encoder pin
 #define ENCODER_HOLES 30  // Number of holes on a single turn
 
 void ENCODER_init(void);  // Initializes encoder related pins

@@ -14,5 +14,6 @@ void MOTOR_backward(void);    // Sets the motor backwards
 void MOTOR_forward_P(void);   // Turns the wheel one turn forward
 void MOTOR_backward_P(void);  // Turns the wheel one turn backward
 void MOTOR_stop(void);        // Stops the motor
+int MOTOR_GET_STATE(void);     //return the state of the motor
 
 #endif

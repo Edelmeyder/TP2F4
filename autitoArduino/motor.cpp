@@ -11,6 +11,10 @@ void MOTOR_init() {
   digitalWrite(MOTOR_PWM_PIN, HIGH);
 }
 
+int MOTOR_GET_STATE(){  //return the state
+  return state;
+}
+
 void MOTOR_forward() {
   if (state == 1) { // If the motor is currently going backwards stop and wait
     MOTOR_stop();
