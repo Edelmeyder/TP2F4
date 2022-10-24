@@ -46,10 +46,10 @@ width: 1000px">
 
 <div id="divNormal" >
 <form name="normalForm">
-  <input style='height:60%;width:40%;font-size:100px' name='F' type='button' onClick="sendChar('F')" value=' &uarr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px' name='f' type='button' onClick="sendChar('f')" value=' &uarr; ' /><br><br><br>
   <input style='height:60%;width:40%;font-size:100px ; margin-right: 2%' name='L' onClick="sendChar('L')" type='button' value=' &larr; ' />
   <input style='height:60%;width:40%;font-size:100px' name='R' type='button' onClick="sendChar('R')" value=' &rarr; ' /><br><br><br>
-  <input style='height:60%;width:40%;font-size:100px' name='B' type='button' onClick="sendChar('B')" value=' &darr; ' /><br><br><br>
+  <input style='height:60%;width:40%;font-size:100px' name='b' type='button' onClick="sendChar('b')" value=' &darr; ' /><br><br><br>
   <input style='height:60%;width:40%;font-size:100px; margin-right: 2% ; background-color: lightskyblue' name='P' onClick="sendChar('P')" type='button' value='Pew'>
   <input style='height:60%;width:40%;font-size:100px ;background-color:indianred' name='S' onClick="sendChar('S')" type='button' value='Stop'>
 

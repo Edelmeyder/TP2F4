@@ -3,7 +3,7 @@
 
 // MOTOR Speed & direction F/B
 #define MOTOR_PWM_PIN D5 // Motor PWM pin
-#define MOTOR_DIR_PIN D8 // Motor Direction pin
+#define MOTOR_DIR_PIN D1 // Motor Direction pin
 #define MOTOR_SPEED 200
 
 #define MOTOR_DELAY 500  // Needed to avoid overloading motors by quickly changing rotation direction
