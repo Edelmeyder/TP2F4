@@ -88,7 +88,7 @@ width: 1000px">
 
   function sendChar(char){
     let request = new XMLHttpRequest();
-    request.open('GET', '/?' + char + '&' + d.getTime());
+    request.open('GET', '/?' + char + '&' + d.getTime(), true);
     request.send();
   }
 
