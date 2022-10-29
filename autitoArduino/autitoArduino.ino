@@ -15,18 +15,6 @@ const char* password = "12345678";
 
 ESP8266WebServer server(80); //Web server
 
-//char cmd; // Stores the commands 
-
-/*data["distance"] = 0;
-data["commands"]["forward"] = 0
-data["commands"]["backward"] = 0;
-{
-  "distance" : 0,
-  "commands" {
-      "forward" : 0,
-      "backward" : 0
-  }
-}*/
 DynamicJsonDocument data(1024);
 const int SIZE = 256;
 
@@ -116,7 +104,7 @@ void handleRoot()
       server.send(200, "text/html", s);   //Send index(html)
       menu(req.c_str()[0]);
       data["commands"][i]["date"] = server.argName(1);
-       i = (i + 1 ) % SIZE;
+      i = (i + 1 ) % SIZE;
     }
     else
     {
@@ -138,7 +126,6 @@ void handleRoot()
 
 void setup() {
   delay(5000);
-  //data["distance"] = 0;
   i = 0;
   MOTOR_init();
   ENCODER_init();
@@ -147,7 +134,7 @@ void setup() {
   SENSOR_init();
   colision_state=0;
   MOTOR_stop();
-delay(5000);
+  delay(5000);
   Serial.begin(115200);
   Serial.println();
   Serial.println("Configuring access point...");
@@ -162,8 +149,6 @@ delay(5000);
 
   server.on("/", handleRoot);
   server.on("/data", handleData);
-
-
 
   server.begin();
 }
