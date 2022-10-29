@@ -88,7 +88,8 @@ width: 1000px">
 
   function sendChar(char){
     let request = new XMLHttpRequest();
-    request.open('GET', '/?' + char + '&' + d.getTime(), true);
+    request.timeout = 2000;
+    request.open('GET', '/?' + char + d.getTime(),true);
     request.send();
   }
 
@@ -129,7 +130,8 @@ width: 1000px">
           break;
       }
     }
-    request.open('GET', '/?E=' + tempstr + '&' + d.getTime(), true);
+    request.timeout = 2000;
+    request.open('GET', '/?E=' + tempstr + d.getTime(), true);
     request.send();
   }   
 </script>

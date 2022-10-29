@@ -23,6 +23,7 @@
 
   function sendChar(char){
     let request = new XMLHttpRequest();
+    request.timeout = 2000;
     request.open('GET', '/?' + char + d.getTime(),true);
     request.send();
   }
@@ -64,6 +65,7 @@
           break;
       }
     }
+    request.timeout = 2000;
     request.open('GET', '/?E=' + tempstr + d.getTime(), true);
     request.send();
   }
