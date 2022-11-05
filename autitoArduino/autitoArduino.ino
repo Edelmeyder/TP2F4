@@ -4,7 +4,7 @@
 #include "pew.h"
 #include "sensor.h"
 #include <ArduinoJson.h>
-
+#include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include "index.h"
 
@@ -20,9 +20,11 @@ const int SIZE = 256;
 String s = MAIN_page; 
 String req;
 int charndx; 
-
+String dataString;
 int colision_state; //1 si hay objeto delante
-int i;
+int iC;
+int iW;
+int scanCount = 29;
 
 void menu(char cmd)
 {
@@ -31,59 +33,52 @@ void menu(char cmd)
         if(!colision_state){
           MOTOR_forward_P();
         }
-        data["commands"][i]["value"] = 'F';
-        Serial.println("FORWARD_P");
+        data["commands"][iC]["value"] = 'F';
         break;
       case 'B':
         MOTOR_backward_P();
-        data["commands"][i]["value"] = 'B';
-        Serial.println("BACK_P");
+        data["commands"][iC]["value"] = 'B';
         break;
       case 'f':
         if(!colision_state){
           MOTOR_forward();
         }
-        data["commands"][i]["value"] = "f";
-        Serial.println("FORWARD");
+        data["commands"][iC]["value"] = "f";
         break;
       case 'b':
         MOTOR_backward();
-        Serial.println("BACK");
-        data["commands"][i]["value"] = "b";
+        data["commands"][iC]["value"] = "b";
         break;
       case 'L':
         STEERING_turnLeft();
-        Serial.println("LEFT");
-        data["commands"][i]["value"] = "L";
+        data["commands"][iC]["value"] = "L";
         delay(100);
         break;
       case 'R':
         STEERING_turnRight();
-        Serial.println("RIGHT");
-        data["commands"][i]["value"] = "R";
+        data["commands"][iC]["value"] = "R";
         delay(100);
         break;
       case 'P':
         PEW_pew();
-        Serial.println("PEW");
-        data["commands"][i]["value"] = "P";
+        data["commands"][iC]["value"] = "P";
         break;
       case 'S':
         MOTOR_stop();
-        Serial.println("STOP");
-        data["commands"][i]["value"] = "S";
+        data["commands"][iC]["value"] = "S";
         break;
     }
 }
 
 void handleData()
 {
-  data["index"] = i;
-  String dataString;
+  data["index"] = iC;
   serializeJson(data, dataString);
   server.send(200, "text/plain",dataString);
   data.clear();
-  i = 0 ;
+  dataString = "";
+  iC = 0;
+  iW = 0;
 }
 
 void handleRoot() 
@@ -97,10 +92,10 @@ void handleRoot()
     req = server.argName(0);
     if (req.c_str()[0] != 'E')   // E ==> sequence, != E ==> the name is the command...
     {
-      server.send(200, "text/html", s);   //Send index(html)
+      server.send(200, "text/plain", "ok");
       menu(req.c_str()[0]);
-      data["commands"][i]["date"] = server.argName(1);
-      i = (i + 1 ) % SIZE;
+      data["commands"][iC]["date"] = server.argName(1);
+      iC = (iC + 1 ) % SIZE;
     }
     else
     {
@@ -111,8 +106,8 @@ void handleRoot()
       while ( isAlpha(req.charAt(charndx)) ) 
       {
         menu(req.charAt(charndx));
-        data["commands"][i]["date"] = server.argName(1);
-        i = (i + 1 ) % SIZE;
+        data["commands"][iC]["date"] = server.argName(1);
+        iC = (iC + 1 ) % SIZE;
         charndx++;
       }
     }
@@ -121,7 +116,8 @@ void handleRoot()
 
 void setup() {
   delay(5000);
-  i = 0;
+  iC = 0;
+  iW = 0;
   MOTOR_init();
   ENCODER_init();
   STEERING_init();
@@ -148,6 +144,14 @@ void setup() {
   server.begin();
 }
 
+void onScanComplete(int networks){
+  for (int j = 0; j < networks; j++){
+    data["wifi"][iW]["SSID"] = WiFi.SSID(j);
+    data["wifi"][iW]["RSSI"] = WiFi.RSSI(j);
+    iW = (iW + 1) % SIZE;
+  }
+}
+
 void loop() {
   colision_state=SENSOR_Verif_Colision();
 
@@ -157,6 +161,12 @@ void loop() {
       MOTOR_stop();
     }
   }
+  
+  if(scanCount++ == 30){
+    WiFi.scanNetworksAsync(onScanComplete, true);
+    scanCount = 0;
+  }
+
   server.handleClient();
   delay(2);
 }

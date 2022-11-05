@@ -1,6 +1,6 @@
 const http = require('http');
 
-const MongoClient = require('mongodb').MongoClient
+/*const MongoClient = require('mongodb').MongoClient
 const url = 'mongodb://127.0.0.1:27017'
 let db;
 let dataCollection;
@@ -32,8 +32,8 @@ try {
   catch(err){
     console.log(err)
   }
-}
-var intervalId = setInterval(test
+}*/
+var intervalId = setInterval(request
   , 3000);
   
 async function request(){  
@@ -48,7 +48,7 @@ http.get('http://192.168.4.1/data', res => {
   res.on('end', async () => {
     let dataString = Buffer.concat(data).toString();
     let jsonData = JSON.parse(dataString);
-    if(jsonData["commands"]){
+    /*if(jsonData["commands"]){
       const index = jsonData["index"];
       if(jsonData["commands"][index + 1]){
         let orderedArray = [...jsonData["commands"].slice(index+1)]
@@ -56,11 +56,13 @@ http.get('http://192.168.4.1/data', res => {
         jsonData["commands"] = [...orderedArray]
       }
       console.log(jsonData["commands"]);
+      console.log(jsonData["wifi"]);
       
     }
     else{
       console.log("Empty Data")
-    }
+    }*/
+    console.log(jsonData);
   });
 }).on('error', err => {
   console.log('Error: ', err.message);
