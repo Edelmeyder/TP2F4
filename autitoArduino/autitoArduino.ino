@@ -4,7 +4,6 @@
 #include "pew.h"
 #include "sensor.h"
 #include <ArduinoJson.h>
-#define LED_PIN D5
 
 #include <ESP8266WebServer.h>
 #include "index.h"
@@ -18,7 +17,9 @@ ESP8266WebServer server(80); //Web server
 DynamicJsonDocument data(1024);
 const int SIZE = 256;
 
-
+String s = MAIN_page; 
+String req;
+int charndx; 
 
 int colision_state; //1 si hay objeto delante
 int i;
@@ -87,11 +88,6 @@ void handleData()
 
 void handleRoot() 
 {
-  String s = MAIN_page; 
-  String req;
-  int charndx; 
-
-
   if (server.args() == 0)    // reply with index if no argument...
   {
     server.send(200, "text/html", s);   //Send index(html)
@@ -120,7 +116,6 @@ void handleRoot()
         charndx++;
       }
     }
-    Serial.flush();
   }
 }
 
