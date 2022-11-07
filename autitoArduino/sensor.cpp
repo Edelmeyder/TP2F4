@@ -25,7 +25,7 @@ void SENSOR_Generate_Pulse (){ //funcion que genera un pulso por el pin de trigg
 
 long SENSOR_Calc_dist (){  //funcion que calcula la distancia en centimetros
 
-  duracion = pulseIn(Pecho, HIGH);
+  duracion = pulseIn(Pecho, HIGH, 1000);
   distancia = (duracion/2) / 29;            // calcula la distancia en centimetros
   return distancia;
   
