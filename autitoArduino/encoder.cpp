@@ -1,12 +1,15 @@
 #include "encoder.h"
 #include <Arduino.h>
 
+#define PI 3.14159265
+
 volatile static int pulses;
 volatile static int turns = 0;
 volatile static int turnStart;
 volatile static int turn = 1;
 
-int ENCODER_read(void);
+float distance = 0;
+
 void encoderIntHandler();
 
 void ENCODER_init() {
@@ -21,6 +24,13 @@ void ENCODER_start() {
 
 void ENCODER_wait() {
   while (!turn);
+}
+
+float ENCODER_distance() {
+  distance = ((float)turns + 1.0/pulses) * PI * ENCODER_WHEEL_DIAMETER;
+  turns = 0;
+  pulses = 0;
+  return distance;
 }
 
 void encoderIntHandler() {
