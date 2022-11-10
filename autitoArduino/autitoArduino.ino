@@ -24,7 +24,7 @@ String dataString;
 int colision_state; //1 si hay objeto delante
 int iC;
 int iW;
-int scanCount = 29;
+int scanCount = 899;
 
 void menu(char cmd)
 {
@@ -145,6 +145,7 @@ void setup() {
 }
 
 void onScanComplete(int networks){
+  Serial.println("Aca");
   for (int j = 0; j < networks; j++){
     data["wifi"][iW]["SSID"] = WiFi.SSID(j);
     data["wifi"][iW]["RSSI"] = WiFi.RSSI(j);
@@ -161,9 +162,9 @@ void loop() {
       MOTOR_stop();
     }
   }
-  
-  if(scanCount++ == 30){
-    WiFi.scanNetworksAsync(onScanComplete, true);
+  scanCount++;
+  if(scanCount == 900){
+    WiFi.scanNetworksAsync(onScanComplete);
     scanCount = 0;
   }
 

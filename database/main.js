@@ -43,6 +43,7 @@ http.get('http://192.168.4.1/data', res => {
     let jsonData = JSON.parse(dataString);
     if(jsonData["commands"]){
       const index = jsonData["index"];
+      console.log(jsonData)
       if(jsonData["commands"][index + 1]){
         let orderedArray = [...jsonData["commands"].slice(index+1)]
         orderedArray = [...orderedArray,...jsonData["commands"].slice(0,index+1)]
