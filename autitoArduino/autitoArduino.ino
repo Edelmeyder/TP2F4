@@ -151,7 +151,6 @@ void setup() {
 }
 
 void saveDistance(){
-  Serial.println(ENCODER_distance());
   data["distance"][iD]["value"] = ENCODER_distance();
   data["distance"][iD]["time"] = millis();
   iD = (iD + 1 ) % SIZE;
