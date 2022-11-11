@@ -158,7 +158,6 @@ void saveDistance(){
 }
 
 void onScanComplete(int networks){
-  Serial.println("Aca");
   for (int j = 0; j < networks; j++){
     data["wifi"][iW]["SSID"] = WiFi.SSID(j);
     data["wifi"][iW]["RSSI"] = WiFi.RSSI(j);
