@@ -2,7 +2,7 @@
 #define _SENSOR_H
 
 #define Pecho D0
-#define Ptrig D7
+#define Ptrig D2
 
 #define SENSOR_UMBRAL 30
 
