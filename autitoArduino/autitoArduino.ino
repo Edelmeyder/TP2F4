@@ -7,6 +7,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include "index.h"
+#define SIZE 256
+#define SCAN_OVERFLOW 900
+#define DISTANCE_OVERFLOW 300
 
 //AP SSID and Password
 const char* ssid = "AutoWiFi1";
@@ -15,16 +18,15 @@ const char* password = "12345678";
 ESP8266WebServer server(80); //Web server
 
 DynamicJsonDocument data(1024);
-const int SIZE = 256;
 
 String s = MAIN_page; 
 String req;
 int charndx; 
 String dataString;
 int colision_state; //1 si hay objeto delante
-int iC;
-int iW;
+int iC,iW,iD;
 int scanCount = 899;
+int distanceCount = 0;
 
 void menu(char cmd)
 {
@@ -72,13 +74,16 @@ void menu(char cmd)
 
 void handleData()
 {
-  data["index"] = iC;
+  data["indexC"] = iC;
+  data["indexD"] = iC;
+  data["time"] = millis();
   serializeJson(data, dataString);
   server.send(200, "text/plain",dataString);
   data.clear();
   dataString = "";
   iC = 0;
   iW = 0;
+  iD = 0;
 }
 
 void handleRoot() 
@@ -118,6 +123,7 @@ void setup() {
   delay(5000);
   iC = 0;
   iW = 0;
+  iD = 0;
   MOTOR_init();
   ENCODER_init();
   STEERING_init();
@@ -144,6 +150,13 @@ void setup() {
   server.begin();
 }
 
+void saveDistance(){
+  Serial.println(ENCODER_distance());
+  data["distance"][iD]["value"] = ENCODER_distance();
+  data["distance"][iD]["time"] = millis();
+  iD = (iD + 1 ) % SIZE;
+}
+
 void onScanComplete(int networks){
   Serial.println("Aca");
   for (int j = 0; j < networks; j++){
@@ -163,9 +176,15 @@ void loop() {
     }
   }
   scanCount++;
-  if(scanCount == 900){
+  distanceCount++;
+  if(scanCount == SCAN_OVERFLOW){
     WiFi.scanNetworksAsync(onScanComplete);
     scanCount = 0;
+  }
+  
+  if(distanceCount == DISTANCE_OVERFLOW){
+    saveDistance();
+    distanceCount = 0;
   }
 
   server.handleClient();

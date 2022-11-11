@@ -36,9 +36,12 @@ void ENCODER_wait() {
 }
 
 float ENCODER_distance() {
-  distance = ((float)turns + 1.0/pulses) * PI * ENCODER_WHEEL_DIAMETER;
-  turns = 0;
-  pulses = 0;
+  if(pulses > 0)
+    distance = ((float)turns + 1.0/pulses) * PI * ENCODER_WHEEL_DIAMETER;
+  else
+    distance = (float)turns * PI * ENCODER_WHEEL_DIAMETER;
+  //turns = 0;
+  //pulses = 0;
   return distance;
 }
 
