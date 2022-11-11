@@ -75,7 +75,7 @@ void menu(char cmd)
 void handleData()
 {
   data["indexC"] = iC;
-  data["indexD"] = iC;
+  data["indexD"] = iD;
   data["time"] = millis();
   serializeJson(data, dataString);
   server.send(200, "text/plain",dataString);
