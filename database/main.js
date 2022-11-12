@@ -70,23 +70,15 @@ http.get('http://192.168.4.1/data', res => {
         if(jsonData["wifi"][index + 1]){
           jsonData["wifi"] = orderArray(jsonData["wifi"])
         }
-        jsonData["wifi"].forEach(async el => {
-          el["time"] = realTime - (sentTime - el["time"]); 
-          try{
-            await wifiCollection.update(
-              {
-                SSID : el.SSID
-              }, 
-              {
-                $setOnInsert: el
-              },
-              {upsert: true}
-            )
-          }
-          catch(err){
-            console.log(err)
-          }
+        jsonData["wifi"].forEach( (value,index) => {
+          jsonData["wifi"][index]["time"] = realTime - (sentTime - value["time"]); 
         })
+        try{
+          await wifiCollection.insertMany(jsonData["wifi"] , options);
+        }
+        catch(err){
+          console.log(err)
+        }
       }
 
       if(jsonData["distance"]){
