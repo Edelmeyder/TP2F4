@@ -63,7 +63,7 @@ width: 1000px">
 </div>
 </CENTER>
 <script lenguage="JavaScript">
-  let lastfield = 7;
+   let lastfield = 7;
   let secuenceMode = false;
   let d = new Date();
   const modebutton = document.getElementById('modebutton');
@@ -88,8 +88,8 @@ width: 1000px">
 
   function sendChar(char){
     let request = new XMLHttpRequest();
-    request.timeout = 2000;
-    request.open('GET', '/?' + char + d.getTime(),true);
+    request.timeout = 1000;
+    request.open('GET', '/?' + char + '&' + d.getTime(),true);
     request.send();
   }
 
@@ -130,10 +130,10 @@ width: 1000px">
           break;
       }
     }
-    request.timeout = 2000;
-    request.open('GET', '/?E=' + tempstr + d.getTime(), true);
+    request.timeout = 1000;
+    request.open('GET', '/?E=' + tempstr + '&' +  d.getTime(), true);
     request.send();
-  }   
+  }
 </script>
 </body>
 </html>

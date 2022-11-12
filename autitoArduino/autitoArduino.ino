@@ -17,7 +17,7 @@ const char* password = "12345678";
 
 ESP8266WebServer server(80); //Web server
 
-DynamicJsonDocument data(1024);
+DynamicJsonDocument data(16384);
 
 String s = MAIN_page; 
 String req;
@@ -76,6 +76,7 @@ void handleData()
 {
   data["indexC"] = iC;
   data["indexD"] = iD;
+  data["indexW"] = iW;
   data["time"] = millis();
   serializeJson(data, dataString);
   server.send(200, "text/plain",dataString);
@@ -157,9 +158,11 @@ void saveDistance(){
 }
 
 void onScanComplete(int networks){
+  int wifiTime = millis();
   for (int j = 0; j < networks; j++){
     data["wifi"][iW]["SSID"] = WiFi.SSID(j);
     data["wifi"][iW]["RSSI"] = WiFi.RSSI(j);
+    data["wifi"][iW]["time"] = wifiTime;
     iW = (iW + 1) % SIZE;
   }
 }

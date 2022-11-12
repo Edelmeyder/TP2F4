@@ -52,6 +52,7 @@ http.get('http://192.168.4.1/data', res => {
     console.log(jsonData)
     if(jsonData){
       const sentTime = jsonData["time"];
+      const realTime = Date.now();
       if(jsonData["commands"]){
         index = jsonData["indexC"];
         if(jsonData["commands"][index + 1]){
@@ -65,7 +66,12 @@ http.get('http://192.168.4.1/data', res => {
         }
       }
       if(jsonData["wifi"]){
+        index = jsonData["indexW"];
+        if(jsonData["wifi"][index + 1]){
+          jsonData["wifi"] = orderArray(jsonData["wifi"])
+        }
         jsonData["wifi"].forEach(async el => {
+          el["time"] = realTime - (sentTime - el["time"]); 
           try{
             await wifiCollection.update(
               {
@@ -89,7 +95,7 @@ http.get('http://192.168.4.1/data', res => {
           jsonData["distance"] = orderArray(jsonData["distance"])
         }
         jsonData["distance"].forEach((value,index) => {
-          jsonData["distance"][index]["time"] = Date.now() - (sentTime - value["time"]); 
+          jsonData["distance"][index]["time"] = realTime - (sentTime - value["time"]); 
         })
         try{
           await distanceCollection.insertMany(jsonData["distance"] , options);
