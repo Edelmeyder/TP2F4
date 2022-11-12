@@ -2,15 +2,30 @@
 #include <Arduino.h>
 
 #define PI 3.14159265
+/*
+  RPM / 60 = revolutions per second
+  RPS * encoder holes = fequency of pulses
+  1 / freq = period of pulses in seconds
+  period * 1000 = period in millis
+  period in millis * 0.7 = the minimum delay between pulses accepted
+*/
+#define MIN_DELAY 700.0/((ENCODER_WHEEL_MAX_RPM / 60) * ENCODER_HOLES) 
 
 volatile static int pulses;
 volatile static int turns = 0;
 volatile static int turnStart;
 volatile static int turn = 1;
+volatile static long lastMillis = 0;
+volatile static long millis;
 
 float distance = 0;
 
 ICACHE_RAM_ATTR void encoderIntHandler() {
+  millis = millis();
+  if (millis - lastMillis < MIN_DELAY) {
+    return;
+  }
+  lastMillis = millis;
   pulses++;
   if (pulses == ENCODER_HOLES) {
     turns++;
