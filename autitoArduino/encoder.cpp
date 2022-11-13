@@ -12,7 +12,7 @@
 */
 #define MIN_DELAY 700.0/((ENCODER_WHEEL_MAX_RPM / 60) * ENCODER_HOLES) 
 
-volatile static long pulses;
+volatile static int pulses;
 volatile static long turns = 0;
 volatile static int turnStart;
 volatile static int turn = 1;
