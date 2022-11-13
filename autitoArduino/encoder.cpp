@@ -1,7 +1,8 @@
 #include "encoder.h"
+#include "motor.h"
+#include "sensor.h"
 #include <Arduino.h>
 
-#define PI 3.14159265
 /*
   RPM / 60 = revolutions per second
   RPS * encoder holes = fequency of pulses
@@ -11,8 +12,8 @@
 */
 #define MIN_DELAY 700.0/((ENCODER_WHEEL_MAX_RPM / 60) * ENCODER_HOLES) 
 
-volatile static int pulses;
-volatile static int turns = 0;
+volatile static long pulses;
+volatile static long turns = 0;
 volatile static int turnStart;
 volatile static int turn = 1;
 volatile static long waitTick;
@@ -21,7 +22,7 @@ volatile static long actualMillis;
 
 float distance = 0;
 
-ICACHE_RAM_ATTR void encoderIntHandler() {
+IRAM_ATTR void encoderIntHandler() {
   actualMillis = millis();
   if (actualMillis - lastMillis < MIN_DELAY) {
     return;
@@ -49,7 +50,11 @@ void ENCODER_start() {
 
 void ENCODER_wait() {
   waitTick = millis();
-  while (!turn  && ((millis() - waitTick) < 300) );
+  while (!turn  && ((millis() - waitTick) < 300) ){
+    if (MOTOR_GET_STATE == 0 && SENSOR_Verif_Colision()) {
+      break;      
+    }
+  }
 }
 
 float ENCODER_distance() {
@@ -57,8 +62,6 @@ float ENCODER_distance() {
     distance = ((float)turns + 1.0/pulses) * PI * ENCODER_WHEEL_DIAMETER;
   else
     distance = (float)turns * PI * ENCODER_WHEEL_DIAMETER;
-  //turns = 0;
-  //pulses = 0;
   return distance;
 }
 
