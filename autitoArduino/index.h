@@ -132,7 +132,6 @@ width: 1000px">
           break;
       }
     }
-    request.timeout = 1000;
     request.open('GET', '/?E=' + tempstr + '&' +  d.getTime(), true);
     request.send();
   }

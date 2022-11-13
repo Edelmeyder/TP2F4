@@ -15,17 +15,18 @@ volatile static int pulses;
 volatile static int turns = 0;
 volatile static int turnStart;
 volatile static int turn = 1;
+volatile static long waitTick;
 volatile static long lastMillis = 0;
-volatile static long millis;
+volatile static long actualMillis;
 
 float distance = 0;
 
 ICACHE_RAM_ATTR void encoderIntHandler() {
-  millis = millis();
-  if (millis - lastMillis < MIN_DELAY) {
+  actualMillis = millis();
+  if (actualMillis - lastMillis < MIN_DELAY) {
     return;
   }
-  lastMillis = millis;
+  lastMillis = actualMillis;
   pulses++;
   if (pulses == ENCODER_HOLES) {
     turns++;
@@ -47,7 +48,8 @@ void ENCODER_start() {
 }
 
 void ENCODER_wait() {
-  while (!turn);
+  waitTick = millis();
+  while (!turn  && ((millis() - waitTick) < 300) );
 }
 
 float ENCODER_distance() {
