@@ -1,4 +1,5 @@
 #include "encoder.h"
+#include "pew.h"
 #include "motor.h"
 #include "sensor.h"
 #include <Arduino.h>
@@ -19,6 +20,8 @@ volatile static int turn = 1;
 volatile static long waitTick;
 volatile static long lastMillis = 0;
 volatile static long actualMillis;
+
+volatile static int state;
 
 float distance = 0;
 
@@ -50,8 +53,12 @@ void ENCODER_start() {
 
 void ENCODER_wait() {
   waitTick = millis();
-  while (!turn  && ((millis() - waitTick) < 300) ){
-    if (MOTOR_GET_STATE == 0 && SENSOR_Verif_Colision()) {
+  state = MOTOR_GET_STATE();
+
+  while (!turn  && ((millis() - waitTick) < 1000) ){
+    if (!state && SENSOR_Verif_Colision()) {
+      
+      MOTOR_stop();
       break;      
     }
   }
@@ -64,6 +71,3 @@ float ENCODER_distance() {
     distance = (float)turns * PI * ENCODER_WHEEL_DIAMETER;
   return distance;
 }
-
-
-

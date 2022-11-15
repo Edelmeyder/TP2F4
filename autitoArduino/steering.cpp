@@ -10,7 +10,7 @@ void STEERING_init() {
   steering.write(STRGHT);
 }
 
-int STEERING_turnLeft() {
+int STEERING_turnRight() {
   if (pos - 3 > MAX_L) {
     pos -= 3;
     steering.write(pos);
@@ -18,7 +18,7 @@ int STEERING_turnLeft() {
   } 
   return 0;
 }
-int STEERING_turnRight() {
+int STEERING_turnLeft() {
   if (pos + 3 < MAX_R) {
     pos += 3;
     steering.write(pos);

@@ -32,14 +32,14 @@ void menu(char cmd)
 {
   switch (cmd) {
       case 'F':
-        if(!colision_state){
+        if(!SENSOR_Verif_Colision()){
           MOTOR_forward_P();
         }
-        data["commands"][iC]["value"] = 'F';
+        data["commands"][iC]["value"] = "F";
         break;
       case 'B':
         MOTOR_backward_P();
-        data["commands"][iC]["value"] = 'B';
+        data["commands"][iC]["value"] = "B";
         break;
       case 'f':
         if(!colision_state){

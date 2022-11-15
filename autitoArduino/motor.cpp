@@ -2,7 +2,7 @@
 #include "encoder.h"
 #include <Arduino.h>
 
-int state = 0; // 0: forward; 1: backward
+volatile int state = 0; // 0: forward; 1: backward
 
 void MOTOR_init() {
   pinMode(MOTOR_DIR_PIN, OUTPUT);
@@ -43,6 +43,7 @@ void MOTOR_forward_P() {
   ENCODER_start();
   ENCODER_wait();
   MOTOR_stop();
+
 }
 void MOTOR_backward_P() {
   MOTOR_backward();
