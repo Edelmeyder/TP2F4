@@ -8,9 +8,9 @@
 #include <ESP8266WebServer.h>
 #include "index.h"
 #define SIZE 256
-#define SCAN_OVERFLOW 900
 #define DISTANCE_OVERFLOW 300
 
+const float THRESHOLD = 10;
 //AP SSID and Password
 const char* ssid = "AutoWiFi1";
 const char* password = "12345678";
@@ -25,7 +25,7 @@ int charndx;
 String dataString;
 int colision_state; //1 si hay objeto delante
 int iC,iW,iD;
-int scanCount = 899;
+float actualDistance, lastDistance = -10.1;
 int distanceCount = 0;
 
 void menu(char cmd)
@@ -152,9 +152,14 @@ void setup() {
 }
 
 void saveDistance(){
-  data["distance"][iD]["value"] = ENCODER_distance();
+  actualDistance = ENCODER_distance();
+  data["distance"][iD]["value"] = actualDistance;
   data["distance"][iD]["time"] = millis();
   iD = (iD + 1 ) % SIZE;
+  if((actualDistance - lastDistance) > THRESHOLD){
+    lastDistance = actualDistance;
+    WiFi.scanNetworksAsync(onScanComplete);
+  }
 }
 
 void onScanComplete(int networks){
@@ -176,12 +181,7 @@ void loop() {
       MOTOR_stop();
     }
   }
-  scanCount++;
   distanceCount++;
-  if(scanCount == SCAN_OVERFLOW){
-    WiFi.scanNetworksAsync(onScanComplete);
-    scanCount = 0;
-  }
   
   if(distanceCount == DISTANCE_OVERFLOW){
     saveDistance();
