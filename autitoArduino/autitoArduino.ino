@@ -10,7 +10,7 @@
 #define SIZE 256
 #define DISTANCE_OVERFLOW 300
 
-const float THRESHOLD = 10;
+const float THRESHOLD = 10; //cada 10 metros escanea WiFi
 //AP SSID and Password
 const char* ssid = "AutoWiFi1";
 const char* password = "12345678";
@@ -62,7 +62,7 @@ void menu(char cmd)
         delay(100);
         break;
       case 'P':
-        PEW_pew();
+        //PEW_pew();
         data["commands"][iC]["value"] = "P";
         break;
       case 'S':
@@ -121,7 +121,7 @@ void handleRoot()
 }
 
 void setup() {
-  delay(5000);
+  delay(1000);
   iC = 0;
   iW = 0;
   iD = 0;
@@ -132,7 +132,7 @@ void setup() {
   SENSOR_init();
   colision_state=0;
   MOTOR_stop();
-  delay(5000);
+  delay(3000);
   Serial.begin(115200);
   Serial.println();
   Serial.println("Configuring access point...");
@@ -142,13 +142,15 @@ void setup() {
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(myIP);
-  server.begin();
-  Serial.println("Server started");
 
   server.on("/", handleRoot);
   server.on("/data", handleData);
 
   server.begin();
+
+  Serial.println("Server started");
+
+  PEW_all_ok();
 }
 
 void saveDistance(){
