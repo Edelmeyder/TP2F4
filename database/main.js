@@ -1,14 +1,14 @@
 const http = require('http');
-
-//const MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient
 const url = 'mongodb://127.0.0.1:27017'
+
 let db;
 let index;
 let commandCollection;
 let wifiCollection;
 let distanceCollection;
 const options = { ordered: true };
-/*MongoClient.connect(
+MongoClient.connect(
   url,
   {
     useNewUrlParser: true,
@@ -26,7 +26,7 @@ const options = { ordered: true };
     
     console.log(`MongoDB Connected: ${url}`)
   }
-)*/
+)
 
 function orderArray(initArray){
   let orderedArray = [...initArray.slice(index+1)]
@@ -58,12 +58,12 @@ http.get('http://192.168.4.1/data', res => {
         if(jsonData["commands"][index + 1]){
           jsonData["commands"] = orderArray(jsonData["commands"])
         }
-       /* try{
+        try{
           await commandCollection.insertMany(jsonData["commands"] , options);
         }
         catch(err){
           console.log(err)
-        }*/
+        }
       }
       if(jsonData["wifi"]){
         index = jsonData["indexW"];
@@ -73,28 +73,25 @@ http.get('http://192.168.4.1/data', res => {
         jsonData["wifi"].forEach( (value,index) => {
           jsonData["wifi"][index]["time"] = realTime - (sentTime - value["time"]); 
         })
-        /*try{
+        try{
           await wifiCollection.insertMany(jsonData["wifi"] , options);
         }
         catch(err){
           console.log(err)
-        }*/
+        }
       }
 
       if(jsonData["distance"]){
-        index = jsonData["indexD"];
-        if(jsonData["distance"][index + 1]){
-          jsonData["distance"] = orderArray(jsonData["distance"])
+        const distanceSave = {
+          "distance" : jsonData["distance"],
+          "time" : realTime
         }
-        jsonData["distance"].forEach((value,index) => {
-          jsonData["distance"][index]["time"] = realTime - (sentTime - value["time"]); 
-        })
-        /*try{
-          await distanceCollection.insertMany(jsonData["distance"] , options);
+        try{
+          await distanceCollection.insertOne(distanceSave);
         }
         catch(err){
           console.log(err)
-        }*/
+        }
       }
   }
   else{

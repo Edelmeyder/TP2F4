@@ -24,9 +24,9 @@ String req;
 int charndx; 
 String dataString;
 int colision_state; //1 si hay objeto delante
-int iC,iW,iD;
+int iC,iW;
 float actualDistance, lastDistance = -10.1;
-int distanceCount = 0;
+int checkDistanceCount = 0;
 
 void menu(char cmd)
 {
@@ -75,16 +75,15 @@ void menu(char cmd)
 void handleData()
 {
   data["indexC"] = iC;
-  data["indexD"] = iD;
   data["indexW"] = iW;
   data["time"] = millis();
+  data["distance"] = ENCODER_distance();
   serializeJson(data, dataString);
   server.send(200, "text/plain",dataString);
   data.clear();
   dataString = "";
   iC = 0;
   iW = 0;
-  iD = 0;
 }
 
 void handleRoot() 
@@ -124,7 +123,6 @@ void setup() {
   delay(1000);
   iC = 0;
   iW = 0;
-  iD = 0;
   MOTOR_init();
   ENCODER_init();
   STEERING_init();
@@ -153,11 +151,8 @@ void setup() {
   PEW_all_ok();
 }
 
-void saveDistance(){
+void checkDistance(){
   actualDistance = ENCODER_distance();
-  data["distance"][iD]["value"] = actualDistance;
-  data["distance"][iD]["time"] = millis();
-  iD = (iD + 1 ) % SIZE;
   if((actualDistance - lastDistance) > THRESHOLD){
     lastDistance = actualDistance;
     WiFi.scanNetworksAsync(onScanComplete);
@@ -183,11 +178,11 @@ void loop() {
       MOTOR_stop();
     }
   }
-  distanceCount++;
+  checkDistanceCount++;
   
-  if(distanceCount == DISTANCE_OVERFLOW){
-    saveDistance();
-    distanceCount = 0;
+  if(checkDistanceCount == DISTANCE_OVERFLOW){
+    checkDistance();
+    checkDistanceCount = 0;
   }
 
   server.handleClient();
