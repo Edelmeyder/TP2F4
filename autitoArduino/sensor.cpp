@@ -41,7 +41,7 @@ int SENSOR_Verif_Colision(){  //funcion que verifica si hay algun objeto delante
   SENSOR_Generate_Pulse();
 
   long distancia_cm = SENSOR_Calc_dist();
-  if(distancia_cm==0){  //se paso de rango
+  if(distancia_cm < 8){  //se paso de rango
     //no hacer nada por ahora, retornar que no hay objeto delante
     return 0;
   }

@@ -62,7 +62,7 @@ void menu(char cmd)
         delay(100);
         break;
       case 'P':
-        //PEW_pew();
+        PEW_pew();
         data["commands"][iC]["value"] = "P";
         break;
       case 'S':
