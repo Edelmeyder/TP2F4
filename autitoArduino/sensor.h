@@ -1,8 +1,8 @@
 #ifndef _SENSOR_H
 #define _SENSOR_H
 
-#define Pecho 9
-#define Ptrig 8
+#define Pecho D0
+#define Ptrig D2
 
 #define SENSOR_UMBRAL 30
 

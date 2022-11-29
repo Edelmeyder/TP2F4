@@ -2,7 +2,7 @@
 #include "encoder.h"
 #include <Arduino.h>
 
-int state = 0; // 0: forward; 1: backward
+volatile int state = 0; // 0: forward; 1: backward
 
 void MOTOR_init() {
   pinMode(MOTOR_DIR_PIN, OUTPUT);
@@ -11,7 +11,7 @@ void MOTOR_init() {
   digitalWrite(MOTOR_PWM_PIN, HIGH);
 }
 
-int MOTOR_GET_STATE(){  //retorna el estado 
+int MOTOR_GET_STATE(){  //return the state
   return state;
 }
 
@@ -19,7 +19,9 @@ void MOTOR_forward() {
   if (state == 1) { // If the motor is currently going backwards stop and wait
     MOTOR_stop();
     delay(MOTOR_DELAY);
+    
   }
+ 
   state = 0;
   digitalWrite(MOTOR_DIR_PIN, HIGH);    // direction = forward
   analogWrite(MOTOR_PWM_PIN, 255-MOTOR_SPEED);   // PWM speed
@@ -32,6 +34,7 @@ void MOTOR_backward() {
   }
   state = 1;
   digitalWrite(MOTOR_DIR_PIN, LOW);     // direction = backward
+  //Serial.println("asdasdsadas");
   analogWrite(MOTOR_PWM_PIN, MOTOR_SPEED);   // PWM speed
 }
 
@@ -40,6 +43,7 @@ void MOTOR_forward_P() {
   ENCODER_start();
   ENCODER_wait();
   MOTOR_stop();
+
 }
 void MOTOR_backward_P() {
   MOTOR_backward();

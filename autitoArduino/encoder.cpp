@@ -1,40 +1,73 @@
 #include "encoder.h"
+#include "pew.h"
+#include "motor.h"
+#include "sensor.h"
 #include <Arduino.h>
 
-int pulses;
+/*
+  RPM / 60 = revolutions per second
+  RPS * encoder holes = fequency of pulses
+  1 / freq = period of pulses in seconds
+  period * 1000 = period in millis
+  period in millis * 0.7 = the minimum delay between pulses accepted
+*/
+#define MIN_DELAY 700.0/((ENCODER_WHEEL_MAX_RPM / 60) * ENCODER_HOLES) 
 
-unsigned long timetick;
+volatile static int pulses;
+volatile static long turns = 0;
+volatile static int turnStart;
+volatile static int turn = 1;
+volatile static long waitTick;
+volatile static long lastMillis = 0;
+volatile static long actualMillis;
 
-int ENCODER_read(void);
+volatile static int state;
+
+float distance = 0;
+
+IRAM_ATTR void encoderIntHandler() {
+  actualMillis = millis();
+  if (actualMillis - lastMillis < MIN_DELAY) {
+    return;
+  }
+  lastMillis = actualMillis;
+  pulses++;
+  if (pulses == ENCODER_HOLES) {
+    turns++;
+    pulses = 0;
+  }
+  if (!turn && pulses == turnStart) {
+    turn = 1;
+  } 
+}
 
 void ENCODER_init() {
   pinMode(ENCODER_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(ENCODER_PIN), encoderIntHandler, RISING);
 }
 
 void ENCODER_start() {
-  pulses = 0;
+  turnStart = pulses;
+  turn = 0;
 }
 
 void ENCODER_wait() {
-  timetick = millis(); // Used to prevent infinite loop in case no pulses are read
-  while (pulses < ENCODER_HOLES && (millis() - timetick) < 500) {
-    if (ENCODER_read()) { // A whole turn has been made
-      pulses++;
+  waitTick = millis();
+  state = MOTOR_GET_STATE();
+
+  while (!turn  && ((millis() - waitTick) < 1000) ){
+    if (!state && SENSOR_Verif_Colision()) {
+      
+      MOTOR_stop();
+      break;      
     }
-    delayMicroseconds(10);
   }
 }
 
-int ENCODER_read() {
-  // Encoder read should be called periodically on a higher frequency than encoder pulses; at least double
-  static int oldValue = 0;
-  static int lastValidValue = 0;
-  byte value;
-  value = digitalRead(ENCODER_PIN);
-  if (value == oldValue & value != lastValidValue) { // Second debounce and multiple detection prevention
-    lastValidValue = value;
-    return value;
-  }
-  oldValue = value; // First debounce
-  return 0;
+float ENCODER_distance() {
+  if(pulses > 0)
+    distance = ((float)turns + 1.0/pulses) * PI * ENCODER_WHEEL_DIAMETER;
+  else
+    distance = (float)turns * PI * ENCODER_WHEEL_DIAMETER;
+  return distance;
 }
