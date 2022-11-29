@@ -49,8 +49,9 @@ http.get('http://192.168.4.1/data', res => {
   res.on('end', async () => {
     let dataString = Buffer.concat(data).toString();
     let jsonData = JSON.parse(dataString);
-    console.log(jsonData)
+  
     if(jsonData){
+      console.log(jsonData)
       const sentTime = jsonData["time"];
       const realTime = Date.now();
       if(jsonData["commands"]){
@@ -58,6 +59,9 @@ http.get('http://192.168.4.1/data', res => {
         if(jsonData["commands"][index + 1]){
           jsonData["commands"] = orderArray(jsonData["commands"])
         }
+        jsonData["commands"].forEach((value,index) => {
+          jsonData["commands"][index]["date"] = new Date(parseInt(value["date"])).toUTCString()
+        })
         try{
           await commandCollection.insertMany(jsonData["commands"] , options);
         }
@@ -71,7 +75,7 @@ http.get('http://192.168.4.1/data', res => {
           jsonData["wifi"] = orderArray(jsonData["wifi"])
         }
         jsonData["wifi"].forEach( (value,index) => {
-          jsonData["wifi"][index]["time"] = realTime - (sentTime - value["time"]); 
+          jsonData["wifi"][index]["date"] = new Date((realTime - (sentTime - value["date"]))).toUTCString() 
         })
         try{
           await wifiCollection.insertMany(jsonData["wifi"] , options);
@@ -84,7 +88,7 @@ http.get('http://192.168.4.1/data', res => {
       if(jsonData["distance"]){
         const distanceSave = {
           "distance" : jsonData["distance"],
-          "time" : realTime
+          "date" : new Date(realTime).toUTCString()
         }
         try{
           await distanceCollection.insertOne(distanceSave);

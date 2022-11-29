@@ -164,7 +164,7 @@ void onScanComplete(int networks){
   for (int j = 0; j < networks; j++){
     data["wifi"][iW]["SSID"] = WiFi.SSID(j);
     data["wifi"][iW]["RSSI"] = WiFi.RSSI(j);
-    data["wifi"][iW]["time"] = wifiTime;
+    data["wifi"][iW]["date"] = wifiTime;
     iW = (iW + 1) % SIZE;
   }
 }
