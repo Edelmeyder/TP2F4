@@ -4,13 +4,12 @@
 #define Pecho D0
 #define Ptrig D2
 
-#define SENSOR_UMBRAL 30
+#define SENSOR_UMBRAL 30 // Medida a partir de la cuál detecta un obstáculo, en centímetros
 
-
+/// Inicializa los pines del sensor
 void SENSOR_init(void);
-void SENSOR_Generate_Pulse (void);
-long SENSOR_Calc_dist (void);
-int SENSOR_Verif_Colision(void);
+/// Función que verifica si hay algún objeto delante dentro del umbral, retorna 1 si lo hay, 0 en caso contrario
+int SENSOR_Verif_Collision(void);
 
 
 #endif  //sensor

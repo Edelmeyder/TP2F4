@@ -3,7 +3,7 @@
 
 Servo steering;
 
-int pos = STRGHT;         // Initial position at "straight" value
+int pos = STRGHT;         // Posición inicial es derecho
 
 void STEERING_init() {
   steering.attach(STEERING_PIN);

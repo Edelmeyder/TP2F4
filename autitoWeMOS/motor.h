@@ -1,19 +1,25 @@
 #ifndef _MOTOR_H
 #define _MOTOR_H
 
-// MOTOR Speed & direction F/B
-#define MOTOR_PWM_PIN D5 // Motor PWM pin
-#define MOTOR_DIR_PIN D1 // Motor Direction pin
-#define MOTOR_SPEED 200
+#define MOTOR_PWM_PIN D5 // Motor pin de PWM
+#define MOTOR_DIR_PIN D1 // Motor pin de dirección
+#define MOTOR_SPEED 200  // Velocidad del pin 0 a 255 max. *Valores bajos no funcionan porque el motor no tiene el torque suficiente.
 
-#define MOTOR_DELAY 500  // Needed to avoid overloading motors by quickly changing rotation direction
+#define MOTOR_DELAY 500  // Delay necesario para evitar sobrecargar al motor al cambiar rápidamente de dirección
 
-void MOTOR_init(void);        // Initialises motor related pins
-void MOTOR_forward(void);     // Sets the motor forwards
-void MOTOR_backward(void);    // Sets the motor backwards
-void MOTOR_forward_P(void);   // Turns the wheel one turn forward
-void MOTOR_backward_P(void);  // Turns the wheel one turn backward
-void MOTOR_stop(void);        // Stops the motor
-int MOTOR_GET_STATE(void);     //return the state of the motor
+/// Inicializa los pines del motor
+void MOTOR_init(void);
+/// Motor hacia adelante, continuo
+void MOTOR_forward(void);
+/// Motor hacia atrás, continuo
+void MOTOR_backward(void);
+/// Gira la rueda una vuelta hacia adelante
+void MOTOR_forward_P(void);
+/// Gira la rueda una vuelta hacia atrás
+void MOTOR_backward_P(void);
+/// Detiene el motor
+void MOTOR_stop(void);
+/// Retorna el estado del motor: 0 adelante, 1 atrás
+int MOTOR_GET_STATE(void);
 
 #endif

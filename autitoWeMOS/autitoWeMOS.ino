@@ -23,7 +23,7 @@ String s = MAIN_page;
 String req;
 int charndx; 
 String dataString;
-int colision_state; //1 si hay objeto delante
+int collision_state; //1 si hay objeto delante
 int iC,iW;
 float actualDistance, lastDistance = -10.1;
 int checkDistanceCount = 0;
@@ -32,7 +32,7 @@ void menu(char cmd)
 {
   switch (cmd) {
       case 'F':
-        if(!SENSOR_Verif_Colision()){
+        if(!SENSOR_Verif_Collision()){
           MOTOR_forward_P();
         }
         data["commands"][iC]["value"] = "F";
@@ -42,7 +42,7 @@ void menu(char cmd)
         data["commands"][iC]["value"] = "B";
         break;
       case 'f':
-        if(!colision_state){
+        if(!collision_state){
           MOTOR_forward();
         }
         data["commands"][iC]["value"] = "f";
@@ -88,14 +88,14 @@ void handleData()
 
 void handleRoot() 
 {
-  if (server.args() == 0)    // reply with index if no argument...
+  if (server.args() == 0)    // Responde con index si no hay argumento...
   {
-    server.send(200, "text/html", s);   //Send index(html)
+    server.send(200, "text/html", s);   // Enviar index(html)
   }
   else
   {
     req = server.argName(0);
-    if (req.c_str()[0] != 'E')   // E ==> sequence, != E ==> the name is the command...
+    if (req.c_str()[0] != 'E')   // E ==> Secuencia, != E ==> El nombre es el comando...
     {
       server.send(200, "text/plain", "ok");
       menu(req.c_str()[0]);
@@ -128,7 +128,7 @@ void setup() {
   STEERING_init();
   PEW_init();
   SENSOR_init();
-  colision_state=0;
+  collision_state=0;
   MOTOR_stop();
   delay(3000);
   Serial.begin(115200);
@@ -170,11 +170,10 @@ void onScanComplete(int networks){
 }
 
 void loop() {
-  colision_state=SENSOR_Verif_Colision();
+  collision_state=SENSOR_Verif_Collision();
 
-  if (colision_state){  //pooling sensor, 1 si se detecto objeto
-
-    if (!MOTOR_GET_STATE()){  //si es 0 es porque va hacia adelante entonces debemos pararlo
+  if (collision_state){  //pooling sensor, 1 si se detectó objeto
+    if (MOTOR_GET_STATE() == 0){  //si es 0 es porque va hacia adelante entonces debemos pararlo
       MOTOR_stop();
     }
   }
