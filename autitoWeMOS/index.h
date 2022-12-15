@@ -47,8 +47,8 @@ width: 1000px">
 <div id="divNormal" >
 <form name="normalForm">
   <input style='height:60%;width:40%;font-size:100px' name='F' type='button' onClick="sendChar('f')" value=' &uarr; ' /><br><br><br>
-  <input style='height:60%;width:40%;font-size:100px ; margin-right: 2%' name='L' onClick="sendChar('L')" type='button' value=' &larr; ' />
-  <input style='height:60%;width:40%;font-size:100px' name='R' type='button' onClick="sendChar('R')" value=' &rarr; ' /><br><br><br>
+  <input id = "leftButton" style='height:60%;width:40%;font-size:100px ; margin-right: 2%' name='L'  type='button' value=' &larr; ' />
+  <input id = "rightButton" style='height:60%;width:40%;font-size:100px' name='R' type='button' value=' &rarr; ' /><br><br><br>
   <input style='height:60%;width:40%;font-size:100px' name='B' type='button' onClick="sendChar('b')" value=' &darr; ' /><br><br><br>
   <input style='height:60%;width:40%;font-size:100px; margin-right: 2% ; background-color: lightskyblue' name='P' onClick="sendChar('P')" type='button' value='Pew'>
   <input style='height:60%;width:40%;font-size:100px ;background-color:indianred' name='S' onClick="sendChar('S')" type='button' value='Stop'>
@@ -63,10 +63,12 @@ width: 1000px">
 </div>
 </CENTER>
 <script lenguage="JavaScript">
-  let lastfield = 7;
+    let lastfield = 7;
   let secuenceMode = false;
-
+  let timerTurn;
   const modebutton = document.getElementById('modebutton');
+  const rightButton = document.getElementById('rightButton');
+  const leftButton = document.getElementById('leftButton');
 
   modebutton.addEventListener('click', function handleClick() {
     secuenceMode = !secuenceMode;
@@ -85,6 +87,46 @@ width: 1000px">
     document.cntrform[0].value = '';
     document.cntrform[lastfield].value = 'Enviar: ';
   }
+
+  
+  function turn(char){
+    clearInterval(timerTurn);
+    sendChar(char);
+    timerTurn = setInterval(function() {
+      sendChar(char);
+      console.log("Function executed")
+    }, 200);
+  }
+  
+  leftButton.addEventListener('mousedown', function(event) {
+    turn('L')
+  });
+   
+  leftButton.addEventListener('mouseup',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
+
+  rightButton.addEventListener('mousedown',function(event){
+    turn('R')}
+    );
+   
+  rightButton.addEventListener('mouseup',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
+
+  //------------------------------------------------------------------//
+
+  leftButton.addEventListener('touchstart', function(event){turn('L')});
+   
+  leftButton.addEventListener('touchend',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
+
+  rightButton.addEventListener('touchstart',function(event){turn('R')});
+   
+  rightButton.addEventListener('touchend',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
 
   function sendChar(char){
     let d = new Date();

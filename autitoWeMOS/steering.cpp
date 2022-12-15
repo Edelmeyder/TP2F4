@@ -11,16 +11,16 @@ void STEERING_init() {
 }
 
 int STEERING_turnRight() {
-  if (pos - 3 > MAX_L) {
-    pos -= 3;
+  if (pos - 6 > MAX_L) {
+    pos -= 6;
     steering.write(pos);
     return 1;
   } 
   return 0;
 }
 int STEERING_turnLeft() {
-  if (pos + 3 < MAX_R) {
-    pos += 3;
+  if (pos + 6 < MAX_R) {
+    pos += 6;
     steering.write(pos);
     return 1;
   } 
