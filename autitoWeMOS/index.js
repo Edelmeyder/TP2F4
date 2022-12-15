@@ -1,7 +1,9 @@
   let lastfield = 7;
   let secuenceMode = false;
-
+  let timerTurn;
   const modebutton = document.getElementById('modebutton');
+  const rightButton = document.getElementById('rightButton');
+  const leftButton = document.getElementById('leftButton');
 
   modebutton.addEventListener('click', function handleClick() {
     secuenceMode = !secuenceMode;
@@ -20,6 +22,46 @@
     document.cntrform[0].value = '';
     document.cntrform[lastfield].value = 'Enviar: ';
   }
+
+  
+  function turn(char){
+    clearInterval(timerTurn);
+    sendChar(char);
+    timerTurn = setInterval(function() {
+      sendChar(char);
+      console.log("Function executed")
+    }, 200);
+  }
+  
+  leftButton.addEventListener('mousedown', function(event) {
+    turn('L')
+  });
+   
+  leftButton.addEventListener('mouseup',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
+
+  rightButton.addEventListener('mousedown',function(event){
+    turn('R')}
+    );
+   
+  rightButton.addEventListener('mouseup',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
+
+  //------------------------------------------------------------------//
+
+  leftButton.addEventListener('touchstart', function(event){turn('L')});
+   
+  leftButton.addEventListener('touchend',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
+
+  rightButton.addEventListener('touchstart',function(event){turn('R')});
+   
+  rightButton.addEventListener('touchend',function(event){ 
+  clearInterval(timerTurn);  // Cancel the timer
+  });
 
   function sendChar(char){
     let d = new Date();
